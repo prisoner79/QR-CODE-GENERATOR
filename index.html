@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="shotcut icon" href="./qr.jpg">
+    <style>
+        :root {
+            --baseColor: #127ce6;
+        }
+
+        .grid {
+            inline-size: 90%;
+            margin-inline: auto;
+            max-inline-size: 20rem;
+            display: grid;
+        }
+
+
+        .hidden {
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+
+        .icon {
+            block-size: 1em;
+            display: inline-block;
+            fill: var(--iconFill);
+            inline-size: 1em;
+            vertical-align: middle;
+        }
+
+        :root {
+            --htmlFontSize: 100%;
+
+            --bodyBackgroundColor: #169cfc;
+            --bodyColor: var(--baseColor);
+            --bodyFontFamily: "Open Sans";
+            --bodyFontFamilyFallback: sans-serif;
+            --bodyFontSize: 0.875rem;
+            --bodyFontWeight: 400;
+            --bodyLineHeight: 1.5;
+        }
+
+        * {
+            box-sizing: inherit;
+        }
+
+        html {
+            box-sizing: border-box;
+            font-size: var(--htmlFontSize);
+        }
+
+        body {
+            background-image: linear-gradient(to right top, #f2008a, #ca2595, #9e3498, #733b91, #4a3b83, #374a8a, #28568d, #23608c, #3a82a5, #5ba5bc, #83c8d1, #afebe8);
+            color: white;
+            font-family: var(--bodyFontFamily), var(--bodyFontFamilyFallback);
+            font-size: var(--bodyFontSize);
+            font-weight: var(--bodyFontWeight);
+            line-height: var(--bodyLineHeight);
+            margin: 0;
+            min-block-size: 100vh;
+            display: grid;
+            place-items: center;
+        }
+
+
+
+        :root {
+            --anchorColor: #eee;
+        }
+
+        a {
+            color: var(--anchorColor);
+            outline: 0;
+            text-decoration: none;
+        }
+
+        a:focus,
+        a:hover {
+            text-decoration: underline;
+        }
+
+
+        :root {
+            --formGap: 0.875rem;
+        }
+
+        input {
+            background-image: none;
+            border: 0;
+            color: inherit;
+            font: inherit;
+            margin: 0;
+            outline: 0;
+            padding: 0;
+            transition: background-color 0.3s;
+        }
+
+        textarea {
+            background-image: none;
+            border: 0;
+            color: white;
+            font: inherit;
+            font-size: 18px;
+            margin: 0;
+            outline: 0;
+            padding: 0;
+            transition: background-color 0.3s;
+        }
+
+        select,
+        option {
+            background-image: none;
+            border: 0;
+            color: black;
+            font-size: 18px;
+            margin: 0;
+            outline: 0;
+            padding: 0;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"] {
+            cursor: pointer;
+        }
+
+
+        textarea,
+        select,
+        option,
+        input[type="submit"] {
+            inline-size: 100%;
+        }
+
+
+
+
+        :root {
+            --loginBorderRadus: 0.25rem;
+            --loginColor: #fff;
+
+            --loginInputBackgroundColor: #ffffff42;
+            --loginInputHoverBackgroundColor: #434a5236;
+
+            --loginLabelBackgroundColor: #fff;
+
+            --loginSubmitBackgroundColor: #ea4c88;
+            --loginSubmitColor: #fff;
+            --loginSubmitHoverBackgroundColor: #d4417988;
+        }
+
+        #qrtext::placeholder {
+            color: white;
+        }
+
+        .login {}
+
+
+        textarea,
+        select,
+        option,
+        textarea,
+        input[type="submit"] {
+            border-radius: var(--loginBorderRadus);
+            padding: 1rem;
+        }
+
+
+
+
+        textarea,
+        option,
+        select {
+            background-color: var(--loginInputBackgroundColor);
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+        }
+
+
+        textarea:focus,
+        textarea:hover {
+            background-color: var(--loginInputHoverBackgroundColor);
+        }
+
+        input[type="submit"] {
+            background-color: #da602c;
+            color: var(--loginSubmitColor);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        input[type="submit"]:focus,
+        input[type="submit"]:hover {
+            background-color: #e075486c;
+        }
+
+
+
+
+        p {
+            margin-block: 1.5rem;
+            text-align: center;
+        }
+
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid">
+        <h2 align="center">QR CODE GENERATOR</h2>
+        <center>
+            <img src="" id="img">
+        </center>
+
+        <select id="size">
+            <option value="100">100x100</option>
+            <option value="150">150x150</option>
+            <option value="200">200x200</option>
+            <option value="250" selected>250x250</option>
+            <option value="300">300x300</option>
+        </select>
+        <br><br>
+        <textarea placeholder="Enter Your Text" id="qrtext"></textarea>
+        <br><br>
+        <input type="submit" value="Generate" onclick="genQR()">
+
+        <p>Developed By Ritik Chaudhary</p>
+
+
+    </div>
+    <script type="text/javascript">
+        function genQR() {
+            var gapi = "https://chart.googleapis.com/chart?chf=bg,s,65432100&cht=qr&chs=";
+            var myimg = document.getElementById("img");
+            var mytext = document.getElementById("qrtext").value;
+            var mysize = document.getElementById("size").value;
+
+            if (mytext !== "" && mysize == "100") {
+                myimg.src = gapi + "100x100" + "&chl=" + mytext;
+                // https://chart.googleapis.com/chart?cht=qr&chs=100x100&chl=hello
+            }
+
+            else if (mytext !== "" && mysize == "150") {
+
+                myimg.src = gapi + "150x150" + "&chl=" + mytext;
+            }
+
+            else if (mytext !== "" && mysize == "200") {
+                myimg.src = gapi + "200x200" + "&chl=" + mytext;
+            }
+
+            else if (mytext !== "" && mysize == "250") {
+                myimg.src = gapi + "250x250" + "&chl=" + mytext;
+            }
+
+            else if (mytext !== "" && mysize == "300") {
+                myimg.src = gapi + "300x300" + "&chl=" + mytext;
+            }
+
+            else {
+                alert("Please Enter Text");
+            }
+
+        }
+    </script>
+</body>
+
+</html>
